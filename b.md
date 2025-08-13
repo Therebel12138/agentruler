@@ -97,16 +97,13 @@ if (mayAssociateWithoutPrompt(callingPackage, userId)) {
 
 攻击步骤
 构造恶意AssociationRequest对象：
-java
 // 攻击者预先构造的恶意request
 AssociationRequest maliciousRequest = new AssociationRequest.Builder()
     .setSingleDevice(true)
     .build();
-
 // 通过反射或其他方式设置skipPrompt为true
 maliciousRequest.setSkipPrompt(true);  // 恶意预设状态
 绕过授权检查：
-java
 
 // 当攻击者调用associate方法时：
 associate(maliciousRequest, callback, attackerPackage);
@@ -115,11 +112,11 @@ associate(maliciousRequest, callback, attackerPackage);
 // 代码也不会执行setSkipPrompt(true)
 // 但更关键的是，也不会执行setSkipPrompt(false)来重置状态！
 利用污染状态：
-java
-
-
 // 在后续的设备发现流程中：
 service.startDiscovery(request, callingPackage, callback, future);
 // request对象仍然保持skipPrompt=true的状态
 // 系统可能会跳过用户确认对话框
-次漏洞要反复确认函数是否对校验不成功（如这里的mayAssociateWithoutPrompt）时，对特权位进行安全的覆盖，如将他设置为request.setSkipPrompt(mayAssociateWithoutPrompt（userid）)后，就是安全的
+
+修复方式：
+如将他设置为request.setSkipPrompt(mayAssociateWithoutPrompt（userid）)后，就是安全的，因为mayAssociateWithoutPrompt（userid）是安全的，
+所以request.setSkipPrompt(mayAssociateWithoutPrompt（userid）)也是安全的
