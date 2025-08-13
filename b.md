@@ -89,7 +89,6 @@ class a{
 
 3、状态污染漏洞状态污染漏洞
 
-java
 if (mayAssociateWithoutPrompt(callingPackage, userId)) {
     Slog.i(LOG_TAG, "setSkipPrompt(true)");
     request.setSkipPrompt(true);  // 只在条件为true时设置
@@ -123,3 +122,4 @@ java
 service.startDiscovery(request, callingPackage, callback, future);
 // request对象仍然保持skipPrompt=true的状态
 // 系统可能会跳过用户确认对话框
+次漏洞要反复确认函数是否对校验不成功（如这里的mayAssociateWithoutPrompt）时，对特权位进行安全的覆盖，如将他设置为request.setSkipPrompt(mayAssociateWithoutPrompt（userid）)后，就是安全的
