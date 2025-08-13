@@ -93,7 +93,7 @@ if (mayAssociateWithoutPrompt(callingPackage, userId)) {
     Slog.i(LOG_TAG, "setSkipPrompt(true)");
     request.setSkipPrompt(true);  // 只在条件为true时设置
 }
-// 没有else分支来重置skipPrompt状态！
+// 没有else分支来重置skipPrompt状态，或者设置为request.setSkipPrompt(mayAssociateWithoutPrompt（userid）)，这样mayAssociateWithoutPrompt不通过时返回false，就会调用setSkipPrompt（false）
 
 攻击步骤
 构造恶意AssociationRequest对象：
