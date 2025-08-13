@@ -1,7 +1,7 @@
 规则表
 
 规则1
-测试代码中的鉴权函数，如 checkCallerIsSystemOr(callingPackage)、check（useid）等，如果代码中没有给定具体的实现，则默认他是安全的；除非给定的代码中有函数的具体实现，你就可以重点怀疑他的安全性
+测试代码中的任何检测身份、权限、状态、分支流的函数，如 checkCallerIsSystemOr(callingPackage)、check（useid），mayAssociateWithoutPrompt（id）等，如果代码中没有给定具体的实现，则默认他是安全的；除非给定的代码中有函数的具体实现，你就可以重点怀疑他的安全性
 规则2
 Android代码中即使对象、函数、变量被标注为 /* @hide / ，他仍然是可以被其他非系统app调用的，等同于没有加标注
 规则三
