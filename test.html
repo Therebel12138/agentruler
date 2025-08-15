@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Show Cookie and Info</title>
+<script>
+function showInfo() {
+    // 获取 cookie
+    var cookies = document.cookie;
+
+    // 获取页面 URL
+    var url = window.location.href;
+
+    // 获取 User-Agent
+    var userAgent = navigator.userAgent;
+
+    // 获取浏览器语言
+    var language = navigator.language;
+
+    // 获取屏幕分辨率
+    var screenRes = window.screen.width + "x" + window.screen.height;
+
+    // 构造提示信息
+    var info = "Cookies: " + cookies + "\n" +
+               "URL: " + url + "\n" +
+               "User-Agent: " + userAgent + "\n" +
+               "Language: " + language + "\n" +
+               "Screen Resolution: " + screenRes;
+
+    // 弹出
+    alert(info);
+}
+</script>
+</head>
+<body>
+<h1>Click the button to show info</h1>
+<button onclick="showInfo()">Show Info</button>
+</body>
+</html>
